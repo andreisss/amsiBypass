@@ -18,7 +18,7 @@ function XOR-HexStrings {
         $result += '{0:X2}' -f $xorResult  # format as hex
     }
 
-    return $result -join ' '  # Return as string of space-separated hex values
+    return $result -join ' ' 
 }
 
 $xorKey = "1246hhjjjkkgdddd"
