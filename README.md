@@ -1,5 +1,7 @@
 # amsiBypass
+
 ```
+
 function XOR-HexStrings {
     param (
         [string]$hexString,
@@ -48,5 +50,6 @@ try {
 } catch {
     Write-Host "An error occurred: $_"
 }
+
 ```
 
