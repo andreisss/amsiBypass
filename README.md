@@ -1,7 +1,6 @@
 # amsiBypass
 
 ```
-
 # Function to XOR two strings and return the result as a hex string
 function XOR-HexStrings {
     param (
@@ -69,6 +68,7 @@ Write-Host "XORed Additional Name Hex: $additionalNameHex"
 Write-Host "XORed Field Name Hex: $fieldNameHex"
 Write-Host "Decrypted Class Name: $className"
 Write-Host "Decrypted Field Name: $fieldName"
+
 
 
 ```
