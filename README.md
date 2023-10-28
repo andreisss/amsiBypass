@@ -1,4 +1,4 @@
-# amsiBypass
+# amsiBypass The code doesn't work without two fix :)
 
 ```
 function X-HxStr {
